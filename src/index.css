@@ -5,6 +5,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Grid background */
+  --grid-size: 48px;      /* bigger cells */
+  --grid-bg: #6ae2ff;     /* overall background */
+  --grid-line: #ffffff;   /* grid line color */
+  background-color: var(--grid-bg);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size), var(--grid-size) var(--grid-size);
+  background-position: 0 0, 0 0;
+  min-height: 100vh;
 }
 
 code {
