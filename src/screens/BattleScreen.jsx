@@ -42,7 +42,7 @@ export default function BattleScreen() {
   const { state, damageEnemy, damageKnight, winBattle, loseBattle } = useGame()
   const enemy = state.battle.enemy
 
-  const [phase, setPhase] = useState('ready') // 'ready' | 'countdown' | 'playerPause' | 'enemy' | 'enemyPause'
+  const [phase, setPhase] = useState('ready') // 'ready' | 'countdown' | 'playerPause' | 'enemy' | 'enemyPause' | 'defeat'
   const [display, setDisplay] = useState('Ready…')
   const [problem, setProblem] = useState(null)
   const [input, setInput] = useState('')
@@ -52,6 +52,7 @@ export default function BattleScreen() {
   const expectedEnemyHpRef = useRef(null)
   const [timeLeft, setTimeLeft] = useState(10)
   const [lastHit, setLastHit] = useState(null) // { who: 'knight'|'enemy', amount }
+  const [defeated, setDefeated] = useState(false)
 
   // Start of each round: when phase is 'ready', run Ready/Set/Go and spawn a new problem
   useEffect(() => {
@@ -153,9 +154,10 @@ export default function BattleScreen() {
     pauseRef.current = setTimeout(() => {
       const hpNow = state?.knightHp ?? 0
       if (hpNow <= 0) {
-        alert('You lost! Returning to Home…')
-        loseBattle()
-        navigate('/', { replace: true })
+        // Pause combat and show Return Home button
+        setDefeated(true)
+        setDisplay('You were defeated.')
+        setPhase('defeat')
       } else {
         // Next round
         setProblem(null)
@@ -172,9 +174,14 @@ export default function BattleScreen() {
 
   const surrender = () => {
     if (confirm('Surrender? Progress will be lost.')) {
-      loseBattle()
       navigate('/', { replace: true })
     }
+  }
+
+  const returnHome = () => {
+    // Finalize defeat and return to home
+    loseBattle()
+    navigate('/', { replace: true })
   }
 
   if (!enemy) return null
@@ -214,7 +221,11 @@ export default function BattleScreen() {
       )}
 
       <div style={{ marginTop: 16 }}>
-        <button onClick={surrender}>Surrender</button>
+        {defeated ? (
+          <button onClick={returnHome}>Return Home</button>
+        ) : (
+          <button onClick={surrender}>Surrender</button>
+        )}
       </div>
     </div>
   )
