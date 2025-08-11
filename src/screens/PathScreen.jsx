@@ -12,6 +12,12 @@ export default function PathScreen() {
     }
   }
 
+  const returnHome = () => {
+    // Used after the user has already won; no confirm needed
+    goHome()
+    navigate('/')
+  }
+
   const onClickNextEnemy = () => {
     enterBattle()
     navigate('/battle')
@@ -43,13 +49,15 @@ export default function PathScreen() {
         <div>
           <strong>You won the game!</strong>
           <div>
-            <button onClick={confirmHome}>Return Home</button>
+            <button onClick={returnHome}>Return Home</button>
           </div>
         </div>
       )}
-      <div style={{ marginTop: 16 }}>
-        <button onClick={confirmHome}>Back to Home</button>
-      </div>
+      {nextEnemy && (
+        <div style={{ marginTop: 16 }}>
+          <button onClick={confirmHome}>Return Home</button>
+        </div>
+      )}
     </div>
   )
 }
