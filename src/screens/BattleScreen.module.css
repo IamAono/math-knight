@@ -1,0 +1,56 @@
+.battleScreen {
+    margin: 10px;
+}
+
+.unitName {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-top: 10px;
+}
+
+.health {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-top: 10px;
+}
+
+.damage {
+    color: #e42813;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.returnHomeButton {
+    background-color: #996f3e;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    margin-top: 30px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 10px;
+}
+
+.surrenderButton {
+    background-color: #e42813;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    margin-top: 30px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 10px;
+}

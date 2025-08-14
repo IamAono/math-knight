@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGame } from '../game/state/GameContext.jsx'
+import styles from './BattleScreen.module.css'
+import knightImg from '../assets/Knight.png'
+import wolfImg from '../assets/Wolf.png'
+import wolfKingImg from '../assets/Wolf King.png'
 
 function roll(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -187,19 +191,26 @@ export default function BattleScreen() {
   if (!enemy) return null
 
   return (
-    <div className="screen battle">
-      <h2>Battle</h2>
+    <div className = {styles.battleScreen}>
       <div className="arena" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
         <div className="knight">
-          <strong>Knight</strong>
-          <div>HP: {state.knightHp}</div>
-          {lastHit?.who === 'knight' && <div style={{ color: 'red' }}>-{lastHit.amount}</div>}
+          <div className = {styles.unitName}>Knight</div>
+          <div className = {styles.health}>HP: {state.knightHp}</div>
+          {lastHit?.who === 'knight' && <div className = {styles.damage}>-{lastHit.amount}</div>}
+          <img src={knightImg} alt="Knight" style={{ width: 120, height: 120, objectFit: 'contain', marginTop: '10px' }} />
         </div>
         <div style={{ flex: 1 }} />
         <div className="enemy">
-          <strong>{enemy.name}</strong>
-          <div>HP: {enemy.hp}/{enemy.maxHp}</div>
-          {lastHit?.who === 'enemy' && <div style={{ color: 'red' }}>-{lastHit.amount}</div>}
+          <div className = {styles.unitName}>{enemy.name}</div>
+          <div className = {styles.health}>HP: {enemy.hp}</div>
+          {lastHit?.who === 'enemy' && <div className = {styles.damage}>-{lastHit.amount}</div>}
+          <div style={{ marginTop: 8 }}>
+            <img
+              src={enemy.name === 'Wolf' ? wolfImg : enemy.name === 'Wolf King' ? wolfKingImg : ''}
+              alt={enemy.name}
+              style={{ width: 120, height: 120, objectFit: 'contain', marginTop: '10px' }}
+            />
+          </div>
         </div>
       </div>
 
@@ -222,9 +233,9 @@ export default function BattleScreen() {
 
       <div style={{ marginTop: 16 }}>
         {defeated ? (
-          <button onClick={returnHome}>Return Home</button>
+          <button className = {styles.returnHomeButton} onClick={returnHome}>Return Home</button>
         ) : (
-          <button onClick={surrender}>Surrender</button>
+          <button className = {styles.surrenderButton} onClick={surrender}>Surrender</button>
         )}
       </div>
     </div>
