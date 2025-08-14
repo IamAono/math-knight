@@ -3,4 +3,5 @@ This is a web-based math game that I vibe coded. You play as a knight, and you d
 
 # Running the Game
 To install the dependencies, use `npm install`
+
 To run the game locally, use `npm run dev`
