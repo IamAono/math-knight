@@ -48,6 +48,9 @@ export default function PathScreen() {
 
   return (
     <div>
+      <div className={styles.difficultyLabel}>
+        Difficulty: {state.difficulty?.charAt(0).toUpperCase() + state.difficulty?.slice(1) || 'Unknown'}
+      </div>
       <div className={styles.knightHealth}>Knight HP: {knightHp}</div>
       <div>
         {nextEnemy && (
