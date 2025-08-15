@@ -11,12 +11,20 @@ export default function HomeScreen() {
     navigate('/path')
   }
 
+  const startMedium = () => {
+    startGame('medium')
+    navigate('/path')
+  }
+
   return (
     <div className={styles.home}>
       <h1 className={styles.title}>Math Knight</h1>
       <p className={styles.subtitle}>Defeat enemies by answering math problems quickly.</p>
       <button className={styles.playButton} onClick={startEasy}>
-        Play (Easy)
+        <span>Easy</span>
+      </button>
+      <button className={styles.playButton} onClick={startMedium}>
+        <span>Medium</span>
       </button>
     </div>
   )
