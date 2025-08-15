@@ -20,24 +20,43 @@ function bracketDamage(ms) {
   return 0
 }
 
-function makeProblem() {
-  // Easy mode: + - * /
+function makeProblem(difficulty) {
   const ops = ['+', '-', 'x', '÷']
   const op = ops[roll(0, ops.length - 1)]
   let a, b, answer
-  switch (op) {
-    case '+':
-      a = roll(1, 99); b = roll(1, 99); answer = a + b; break
-    case '-':
-      a = roll(1, 99); b = roll(1, 99); if (b > a) [a, b] = [b, a]; answer = a - b; break
-    case 'x':
-      a = roll(1, 10); b = roll(1, 10); answer = a * b; break
-    case '÷': {
-      const r = roll(1, 10); b = roll(1, 10); a = r * b; answer = r; break
+
+  const d = (difficulty || 'easy').toLowerCase()
+  if (d === 'medium') {
+    switch (op) {
+      case '+':
+        a = roll(1, 199); b = roll(1, 199); answer = a + b; break
+      case '-':
+        a = roll(1, 199); b = roll(1, 199); if (b > a) [a, b] = [b, a]; answer = a - b; break
+      case 'x':
+        a = roll(1, 20); b = roll(1, 20); answer = a * b; break
+      case '÷': {
+        const r = roll(1, 20); b = roll(1, 20); a = r * b; answer = r; break
+      }
+      default:
+        a = 1; b = 1; answer = 2
     }
-    default:
-      a = 1; b = 1; answer = 2
+  } else {
+    // easy (default)
+    switch (op) {
+      case '+':
+        a = roll(1, 99); b = roll(1, 99); answer = a + b; break
+      case '-':
+        a = roll(1, 99); b = roll(1, 99); if (b > a) [a, b] = [b, a]; answer = a - b; break
+      case 'x':
+        a = roll(1, 10); b = roll(1, 10); answer = a * b; break
+      case '÷': {
+        const r = roll(1, 10); b = roll(1, 10); a = r * b; answer = r; break
+      }
+      default:
+        a = 1; b = 1; answer = 2
+    }
   }
+
   return { text: `${a} ${op} ${b}`, answer }
 }
 
@@ -73,7 +92,7 @@ export default function BattleScreen() {
     let t3 = setTimeout(() => {
       setPhase('countdown')
       setInput('') // clear any previous input at the start of a new problem
-      const p = makeProblem()
+      const p = makeProblem(state.difficulty)
       setProblem(p)
       startTimeRef.current = performance.now()
       setTimeLeft(10)
