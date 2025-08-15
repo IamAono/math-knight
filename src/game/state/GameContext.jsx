@@ -13,7 +13,7 @@ const initialState = {
 
 const enemyTypes = {
   wolf: { name: 'Wolf', maxHp: 10, dmg: [2, 4] },
-  wolfKing: { name: 'Wolf King', maxHp: 15, dmg: [3, 6] },
+  wolfKing: { name: 'Wolf King', maxHp: 15, dmg: [3, 5] },
 }
 
 // No per-difficulty HP or path. Difficulty is label only.
