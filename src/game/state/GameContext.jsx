@@ -16,24 +16,22 @@ const enemyTypes = {
   wolfKing: { name: 'Wolf King', maxHp: 15, dmg: [3, 6] },
 }
 
-const difficulties = {
-  easy: {
-    knightHp: 30,
-    path: [enemyTypes.wolf, enemyTypes.wolf, enemyTypes.wolfKing],
-  },
-}
+// No per-difficulty HP or path. Difficulty is label only.
 
 function reducer(state, action) {
   switch (action.type) {
     case 'START_GAME': {
-      const cfg = difficulties[action.payload.difficulty]
       return {
         ...state,
         phase: 'path',
         difficulty: action.payload.difficulty,
-        knightHp: cfg.knightHp,
+        knightHp: 30,
         currentEnemyIndex: 0,
-        enemies: cfg.path.map((et) => ({ ...et, hp: et.maxHp })),
+        enemies: [
+          { ...enemyTypes.wolf, hp: enemyTypes.wolf.maxHp },
+          { ...enemyTypes.wolf, hp: enemyTypes.wolf.maxHp },
+          { ...enemyTypes.wolfKing, hp: enemyTypes.wolfKing.maxHp },
+        ],
         battle: { enemy: null },
       }
     }
