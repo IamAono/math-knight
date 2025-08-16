@@ -16,6 +16,11 @@ export default function HomeScreen() {
     navigate('/path')
   }
 
+  const startHard = () => {
+    startGame('hard')
+    navigate('/path')
+  }
+
   return (
     <div className={styles.home}>
       <h1 className={styles.title}>Math Knight</h1>
@@ -25,6 +30,9 @@ export default function HomeScreen() {
       </button>
       <button className={styles.playButton} onClick={startMedium}>
         <span>Medium</span>
+      </button>
+      <button className={styles.playButton} onClick={startHard}>
+        <span>Hard</span>
       </button>
     </div>
   )
