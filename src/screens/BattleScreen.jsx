@@ -26,7 +26,21 @@ function makeProblem(difficulty) {
   let a, b, answer
 
   const d = (difficulty || 'easy').toLowerCase()
-  if (d === 'medium') {
+  if (d === 'hard') {
+    switch (op) {
+      case '+':
+        a = roll(1, 199); b = roll(1, 199); answer = a + b; break
+      case '-':
+        a = roll(1, 199); b = roll(1, 199); if (b > a) [a, b] = [b, a]; answer = a - b; break
+      case 'x':
+        a = roll(10, 20); b = roll(10, 20); answer = a * b; break
+      case '÷': {
+        const r = roll(10, 20); b = roll(10, 20); a = r * b; answer = r; break
+      }
+      default:
+        a = 1; b = 1; answer = 2
+    }
+  } else if (d === 'medium') {
     switch (op) {
       case '+':
         a = roll(1, 199); b = roll(1, 199); answer = a + b; break
