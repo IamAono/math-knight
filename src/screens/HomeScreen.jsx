@@ -5,7 +5,7 @@ import styles from './HomeScreen.module.css'
 
 export default function HomeScreen() {
   const navigate = useNavigate()
-  const { startGame } = useGame()
+  const { startGame, startMarathon } = useGame()
   const [selectedMode, setSelectedMode] = useState(null) // 'regular' | 'marathon' | null
   const [hoverMode, setHoverMode] = useState(null) // null | 'regular' | 'marathon'
 
@@ -22,6 +22,20 @@ export default function HomeScreen() {
   const startHard = () => {
     startGame('hard')
     navigate('/path')
+  }
+
+  // Marathon starters
+  const startMarathonEasy = () => {
+    startMarathon('easy')
+    navigate('/battle')
+  }
+  const startMarathonMedium = () => {
+    startMarathon('medium')
+    navigate('/battle')
+  }
+  const startMarathonHard = () => {
+    startMarathon('hard')
+    navigate('/battle')
   }
 
   return (
@@ -88,13 +102,13 @@ export default function HomeScreen() {
           <p className={styles.subtitle}>Marathon Mode</p>
           <p className={styles.subtitle}>Select Difficulty</p>
           <div className={styles.stack}>
-            <button className={styles.playButton} onClick={() => {}}>
+            <button className={styles.playButton} onClick={startMarathonEasy}>
               <span>Easy</span>
             </button>
-            <button className={styles.playButton} onClick={() => {}}>
+            <button className={styles.playButton} onClick={startMarathonMedium}>
               <span>Medium</span>
             </button>
-            <button className={styles.playButton} onClick={() => {}}>
+            <button className={styles.playButton} onClick={startMarathonHard}>
               <span>Hard</span>
             </button>
             <button className={styles.playButton} onClick={() => setSelectedMode(null)}>

@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useMemo, useReducer } from 'react'
 
 const initialState = {
+  mode: 'regular', // 'regular' | 'marathon'
   phase: 'home', // 'home' | 'path' | 'battle'
-  difficulty: null, // 'easy' | future
+  difficulty: null, // 'easy' | 'medium' | 'hard'
   knightHp: 30,
   currentEnemyIndex: 0,
-  enemies: [], // filled on start
+  enemies: [], // filled on start for regular
+  killCount: 0, // used in marathon
   battle: {
     enemy: null,
   },
@@ -23,6 +25,7 @@ function reducer(state, action) {
     case 'START_GAME': {
       return {
         ...state,
+        mode: 'regular',
         phase: 'path',
         difficulty: action.payload.difficulty,
         knightHp: 30,
@@ -32,7 +35,21 @@ function reducer(state, action) {
           { ...enemyTypes.wolf, hp: enemyTypes.wolf.maxHp },
           { ...enemyTypes.wolfKing, hp: enemyTypes.wolfKing.maxHp },
         ],
+        killCount: 0,
         battle: { enemy: null },
+      }
+    }
+    case 'START_MARATHON': {
+      return {
+        ...state,
+        mode: 'marathon',
+        phase: 'battle',
+        difficulty: action.payload.difficulty,
+        knightHp: 30,
+        currentEnemyIndex: 0,
+        enemies: [],
+        killCount: 0,
+        battle: { enemy: { ...enemyTypes.wolf, hp: enemyTypes.wolf.maxHp } },
       }
     }
     case 'ENTER_BATTLE': {
@@ -40,15 +57,25 @@ function reducer(state, action) {
       return { ...state, phase: 'battle', battle: { enemy } }
     }
     case 'EXIT_BATTLE_WIN': {
-      const newEnemies = state.enemies.slice()
-      newEnemies[state.currentEnemyIndex] = { ...newEnemies[state.currentEnemyIndex], defeated: true, hp: 0 }
-      const nextIndex = state.currentEnemyIndex + 1
-      return {
-        ...state,
-        phase: 'path',
-        currentEnemyIndex: nextIndex,
-        enemies: newEnemies,
-        battle: { enemy: null },
+      if (state.mode === 'marathon') {
+        // Increase kill count and respawn a fresh wolf immediately
+        return {
+          ...state,
+          phase: 'battle',
+          killCount: (state.killCount || 0) + 1,
+          battle: { enemy: { ...enemyTypes.wolf, hp: enemyTypes.wolf.maxHp } },
+        }
+      } else {
+        const newEnemies = state.enemies.slice()
+        newEnemies[state.currentEnemyIndex] = { ...newEnemies[state.currentEnemyIndex], defeated: true, hp: 0 }
+        const nextIndex = state.currentEnemyIndex + 1
+        return {
+          ...state,
+          phase: 'path',
+          currentEnemyIndex: nextIndex,
+          enemies: newEnemies,
+          battle: { enemy: null },
+        }
       }
     }
     case 'EXIT_BATTLE_LOSE': {
@@ -62,11 +89,17 @@ function reducer(state, action) {
       return { ...state, knightHp: hp }
     }
     case 'DAMAGE_ENEMY': {
-      const newEnemies = state.enemies.slice()
-      const idx = state.currentEnemyIndex
-      const enemy = newEnemies[idx]
-      newEnemies[idx] = { ...enemy, hp: Math.max(0, enemy.hp - action.payload.amount) }
-      return { ...state, enemies: newEnemies, battle: { enemy: newEnemies[idx] } }
+      if (state.mode === 'marathon') {
+        const current = state.battle.enemy
+        const updated = { ...current, hp: Math.max(0, (current?.hp ?? 0) - action.payload.amount) }
+        return { ...state, battle: { enemy: updated } }
+      } else {
+        const newEnemies = state.enemies.slice()
+        const idx = state.currentEnemyIndex
+        const enemy = newEnemies[idx]
+        newEnemies[idx] = { ...enemy, hp: Math.max(0, enemy.hp - action.payload.amount) }
+        return { ...state, enemies: newEnemies, battle: { enemy: newEnemies[idx] } }
+      }
     }
     default:
       return state
@@ -81,6 +114,7 @@ export function GameProvider({ children }) {
   const api = useMemo(() => ({
     state,
     startGame: (difficulty) => dispatch({ type: 'START_GAME', payload: { difficulty } }),
+    startMarathon: (difficulty) => dispatch({ type: 'START_MARATHON', payload: { difficulty } }),
     enterBattle: () => dispatch({ type: 'ENTER_BATTLE' }),
     winBattle: () => dispatch({ type: 'EXIT_BATTLE_WIN' }),
     loseBattle: () => dispatch({ type: 'EXIT_BATTLE_LOSE' }),

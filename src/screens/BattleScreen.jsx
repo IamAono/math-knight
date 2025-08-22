@@ -94,7 +94,10 @@ export default function BattleScreen() {
   // Start of each round: when phase is 'ready', run Ready/Set/Go and spawn a new problem
   useEffect(() => {
     if (!enemy) {
-      navigate('/path', { replace: true })
+      // In marathon, the next wolf will be spawned by state after a win; don't navigate away
+      if (state.mode !== 'marathon') {
+        navigate('/path', { replace: true })
+      }
       return
     }
     if (phase !== 'ready') return
@@ -152,7 +155,12 @@ export default function BattleScreen() {
       if (expectedEnemyHpRef.current !== null && expectedEnemyHpRef.current <= 0) {
         expectedEnemyHpRef.current = null
         winBattle()
-        navigate('/path', { replace: true })
+        if (state.mode !== 'marathon') {
+          navigate('/path', { replace: true })
+        } else {
+          // Stay in battle; next wolf is spawned by reducer
+          setPhase('ready')
+        }
         return
       }
       // Otherwise proceed to enemy attack
@@ -171,7 +179,12 @@ export default function BattleScreen() {
     // Check if enemy defeated
     if (!currentEnemy || currentEnemy.hp <= 0) {
       winBattle()
-      navigate('/path', { replace: true })
+      if (state.mode !== 'marathon') {
+        navigate('/path', { replace: true })
+      } else {
+        // Immediately continue the loop
+        setPhase('ready')
+      }
       return
     }
     // Enemy attacks now, then go to enemyPause for 3 seconds
@@ -225,6 +238,11 @@ export default function BattleScreen() {
 
   return (
     <div className = {styles.battleScreen}>
+      {state.mode === 'marathon' && (
+        <div className={styles.killCount}>
+          Kills: {state.killCount}
+        </div>
+      )}
       <div className="arena" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
         <div className="knight">
           <div className = {styles.unitName}>Knight</div>
