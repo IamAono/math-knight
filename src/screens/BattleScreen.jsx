@@ -247,14 +247,14 @@ export default function BattleScreen() {
         <div className="knight">
           <div className = {styles.unitName}>Knight</div>
           <div className = {styles.health}>HP: {state.knightHp}</div>
-          {lastHit?.who === 'knight' && <div className = {styles.damage}>-{lastHit.amount}</div>}
+          {lastHit?.who === 'knight' && phase === 'enemyPause' && <div className = {styles.damage}>-{lastHit.amount}</div>}
           <img src={knightImg} alt="Knight" style={{ width: 120, height: 120, objectFit: 'contain', marginTop: '10px' }} />
         </div>
         <div style={{ flex: 1 }} />
         <div className="enemy">
           <div className = {styles.unitName}>{enemy.name}</div>
           <div className = {styles.health}>HP: {enemy.hp}</div>
-          {lastHit?.who === 'enemy' && <div className = {styles.damage}>-{lastHit.amount}</div>}
+          {lastHit?.who === 'enemy' && phase === 'playerPause' && <div className = {styles.damage}>-{lastHit.amount}</div>}
           <div style={{ marginTop: 8 }}>
             <img
               src={enemy.name === 'Wolf' ? wolfImg : enemy.name === 'Wolf King' ? wolfKingImg : ''}
