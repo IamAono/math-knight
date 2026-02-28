@@ -160,6 +160,7 @@ export default function BattleScreen() {
         } else {
           // Stay in battle; next wolf is spawned by reducer
           setPhase('ready')
+          setLastHit(null)
         }
         return
       }
