@@ -265,11 +265,11 @@ export default function BattleScreen() {
         </div>
       </div>
 
-      {phase === 'ready' && <div className="ready-set-go" style={{ fontSize: 24 }}>{display}</div>}
+      {phase === 'ready' && <div className="ready-set-go" style={{ fontSize: 24, fontWeight: 'bold' }}>{display}</div>}
       {phase === 'countdown' && (
         <div className="challenge" style={{ marginTop: 16 }}>
-          <div style={{ fontSize: 28, marginBottom: 8 }}>{problem.text}</div>
-          <div>Time left: {timeLeft}s</div>
+          <div style={{ fontSize: 28, marginBottom: 8, fontWeight: 'bold' }}>{problem.text}</div>
+          <div style={{ fontSize: 24, fontWeight: 'bold' }}>Time left: {timeLeft}s</div>
           <input
             autoFocus
             inputMode="numeric"
